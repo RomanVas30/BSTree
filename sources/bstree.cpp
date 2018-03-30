@@ -51,6 +51,12 @@ auto change_color(int c) -> void {
 
 Tree::Tree() : root{nullptr} {};
 
+auto Tree::empty() -> bool{
+  if(root == nullptr)
+  return true;
+  else return false;
+}
+
 auto Tree::insert(int value) -> bool { add(root, value); }
 
 auto Tree::add(Node*& curr, int value) -> void {
