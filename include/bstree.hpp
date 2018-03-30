@@ -15,6 +15,7 @@ class Tree {
   auto add(Node*&, int) -> void;
   auto print_(Node*, int) -> void;
   auto print() -> void;
+  auto empty() -> bool;
   ~Tree();
 };
 }
