@@ -4,12 +4,12 @@
 using namespace BSTree;
 using namespace std;
 
-auto menu(Tree*&) -> void;
+auto menu(Tree&) -> void;
 
 auto change_color(int c) -> void;
 
 int main(int argc, char* argv[]) {
-  Tree* tree = new Tree;
+  Tree tree;
   int n = 0;
 
   for (unsigned int i = 1; i < argc; ++i) ++n;
@@ -42,13 +42,13 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  for (unsigned i = 0; i < k; ++i) tree->insert(MassTree[i]);
+  for (unsigned i = 0; i < k; ++i) tree.insert(MassTree[i]);
   delete[] MassTree_curr;
   menu(tree);
   delete[] MassTree;
 }
 
-auto menu(Tree*& tree) -> void {
+auto menu(Tree & tree) -> void {
   while (1) {
     change_color(CYAN);
     cout << "Выберите одну из операций: " << endl;
@@ -63,12 +63,12 @@ auto menu(Tree*& tree) -> void {
     change_color(GREEN);
     int choise = 0;
     cin >> choise;
-    if (tree->empty()&&(choise != 8))
+    if (tree.empty()&&(choise != 8))
       cout << "Дерево пустое!" << endl;
     else
       switch (choise) {
         case 1:
-          tree->print();
+          tree.print();
           break;
         case 8: {
           change_color(RED);
