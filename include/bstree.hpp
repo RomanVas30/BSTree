@@ -16,6 +16,7 @@ class Tree {
   auto print_(Node*, int) -> void;
   auto print() -> void;
   auto empty() -> bool;
+  auto delete_Tree(Node* curr) -> void;
   ~Tree();
 };
 }
