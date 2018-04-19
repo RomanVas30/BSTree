@@ -57,7 +57,10 @@ auto Tree::empty() -> bool{
   else return false;
 }
 
-auto Tree::insert(int value) -> bool { add(root, value); }
+auto Tree::insert(int value) -> bool {
+  add(root, value); 
+  return true;
+}
 
 auto Tree::add(Node*& curr, int value) -> void {
   if (curr == nullptr)
