@@ -1,36 +1,47 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.3)
 
-set(CMAKE_CXX_STANDARD 11)
+include("gate/cmake/HunterGate.cmake")
+HunterGate(
+    URL "https://github.com/ruslo/hunter/archive/v0.19.51.tar.gz"
+    SHA1 "d238dc1dd4db83e45a592f96fdb95d17c688600a"
+)
+
+project(BSTree)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(BUILD_EXAMPLES "Build examples" OFF)
+option(BUILD_TESTS "Build tests" OFF)
+option(BUILD_EXAMPLES "Build Examples" OFF)
 
-project(print)
+set(${PROJECT_NAME}_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/sources/bstree.cpp")
 
-add_library(print STATIC ${CMAKE_CURRENT_SOURCE_DIR}/sources/print.cpp)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
-target_include_directories(print PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-)
+add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
 
-if(BUILD_EXAMPLES)
-  file(GLOB EXAMPLE_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/examples/*.cpp")
-  foreach(EXAMPLE_SOURCE ${EXAMPLE_SOURCES})
-    get_filename_component(EXAMPLE_NAME ${EXAMPLE_SOURCE} NAME_WE)
-    add_executable(${EXAMPLE_NAME} ${EXAMPLE_SOURCE})
-    target_link_libraries(${EXAMPLE_NAME} print)
-    install(TARGETS ${EXAMPLE_NAME}
-      RUNTIME DESTINATION bin
-    )
-  endforeach(EXAMPLE_SOURCE ${EXAMPLE_SOURCES})
+if(BUILD_TESTS)
+  hunter_add_package(Catch)
+  find_package(Catch CONFIG REQUIRED)
+
+  enable_testing()
+
+  file(GLOB ${PROJECT_NAME}_TEST_SOURCES tests/*.cpp)
+  add_executable(tests ${${PROJECT_NAME}_TEST_SOURCES})
+  target_link_libraries(tests ${PROJECT_NAME} Catch::Catch )
+
+  add_test(NAME test_name COMMAND tests "-s" "-r" "compact" "--use-colour" "yes") 
 endif()
 
-install(TARGETS print
-    EXPORT print-config
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-)
-
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include)
-install(EXPORT print-config DESTINATION cmake)
+if(BUILD_EXAMPLES)
+    file(GLOB EXAMPLE_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/examples/*.cpp")
+    foreach(EXAMPLE_SOURCE ${EXAMPLE_SOURCES})
+        get_filename_component(EXAMPLE_NAME ${EXAMPLE_SOURCE} NAME_WE)
+        set(EXAMPLE_TARGET_NAME example_${EXAMPLE_NAME})
+        add_executable(${EXAMPLE_TARGET_NAME} ${EXAMPLE_SOURCE})
+        target_link_libraries(${EXAMPLE_TARGET_NAME} ${PROJECT_NAME})
+        set_target_properties(${EXAMPLE_TARGET_NAME} PROPERTIES OUTPUT_NAME ${EXAMPLE_NAME})
+        install(TARGETS ${EXAMPLE_TARGET_NAME}
+                RUNTIME DESTINATION bin
+                )
+    endforeach(EXAMPLE_SOURCE ${EXAMPLE_SOURCES})
+endif()
