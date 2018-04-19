@@ -86,4 +86,16 @@ auto Tree::print_(Node* curr, int level) -> void {
   }
 }
 
-Tree::~Tree(){};
+auto Tree::delete_Tree(Node* curr) -> void{
+      if (curr->right != nullptr)
+        delete_Tree(curr->right);
+      if (curr->left != nullptr)
+        delete_Tree(curr->left);
+      delete curr;
+      curr = nullptr;
+}
+
+Tree::~Tree(){
+  if(root != nullptr)
+  delete_Tree(root);
+};
