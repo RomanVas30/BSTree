@@ -63,12 +63,12 @@ auto menu(Tree & tree) -> void {
         change_color(GREEN);
         int choise = 0;
         cin >> choise;
-        if (tree.empty()&&(choise != 8))
+        if (tree.exists()&&(choise != 8))
             cout << "Дерево пустое!" << endl;
         else
             switch (choise) {
             case 1:
-                tree.print();
+                tree.print_tree();
                 break;
             case 2: {
                 change_color(GREEN);
@@ -79,11 +79,11 @@ auto menu(Tree & tree) -> void {
                 char value;
                 cin >> value;
                 if (value == 'a')
-                    tree.list(traversal_order::pre);
+                    tree.print(traversal_order::pre);
                 else if (value == 'b')
-                    tree.list(traversal_order::in);
+                    tree.print(traversal_order::in);
                 else if (value == 'c')
-                    tree.list(traversal_order::post);
+                    tree.print(traversal_order::post);
                 else {
                     change_color(RED);
                     cout << "Введено некорректное значение!";
@@ -111,7 +111,7 @@ auto menu(Tree & tree) -> void {
                 cout << "Введите значение удаляемого элемента: ";
                 int value;
                 cin >> value;
-                bool flag = tree.remove_element(value);
+                bool flag = tree.remove(value);
                 if (flag) {
                     cout << "Элемент успешно удален из дерева!" << endl;
                 }
