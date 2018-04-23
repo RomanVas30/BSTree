@@ -49,7 +49,7 @@ auto change_color(int c) -> void {
     }
 }
 
-auto Tree::empty() -> bool {
+auto Tree::exists() -> bool {
     if(root == nullptr)
         return true;
     else return false;
@@ -58,6 +58,15 @@ auto Tree::empty() -> bool {
 Tree::Tree() : root {nullptr} {
 
 };
+
+auto add(Node*& curr, int value) -> void {
+    if (curr == nullptr)
+        curr = new Node{value};
+    else {
+        if (curr->data < value) add(curr->right, value);
+        if (curr->data > value) add(curr->left, value);
+    }
+}
 
 auto Tree::insert(int value) -> void {
     add(root, value);
@@ -95,7 +104,7 @@ auto post_detour(Node* curr) -> void {
 
 //}
 
-auto Tree::list(traversal_order order) -> void {
+auto Tree::print(traversal_order order) -> void {
     Node* curr = root;
     switch (order) {
     case traversal_order::pre: {
@@ -115,33 +124,24 @@ auto Tree::list(traversal_order order) -> void {
     }
 }
 
-auto Tree::add(Node*& curr, int value) -> void {
-    if (curr == nullptr)
-        curr = new Node{value};
-    else {
-        if (curr->data < value) add(curr->right, value);
-        if (curr->data > value) add(curr->left, value);
-    }
-}
-
-auto Tree::print() -> void {
-    print_(root, 0);
-}
-
-auto Tree::print_(Node* curr, int level) -> void {
+auto print_(Node* curr, int level, int root_data) -> void {
     if (curr != nullptr) {
         if (curr->right != nullptr) {
-            print_(curr->right, level + 1);
+            print_(curr->right, level + 1, root_data);
         }
         for (unsigned i = 0; i < level; ++i) std::cout << "  ";
-        if (curr->data != root->data) {
+        if (curr->data != root_data) {
             std::cout << "--";
         }
         std::cout << curr->data << std::endl;
         if (curr->left != nullptr) {
-            print_(curr->left, level + 1);
+            print_(curr->left, level + 1, root_data);
         }
     }
+}
+
+auto Tree::print_tree() -> void {
+    print_(root, 0, root->data);
 }
 
 auto Tree::add_element(int value) -> bool {
@@ -160,7 +160,8 @@ auto Tree::add_element(int value) -> bool {
     return true;
 }
 
-auto Tree::remove_element(int value) -> bool {
+auto Tree::remove(int value) -> bool {
+    //Проверка наличия потомков у корня
     if ((root->right == nullptr)&&(root->left == nullptr)) {
         delete root;
         root = nullptr;
@@ -169,8 +170,9 @@ auto Tree::remove_element(int value) -> bool {
     Node* curr = root;
     Node* parent = root;
     Node* parent_delete = root;
+    //Проверка наличия элемента в дереве
     while(1) {
-        if(value == root->data) break;
+        if(value == root->data) break; //Проверка корня
         if ((value >= curr->data)&&(curr->right != nullptr)) {
             parent = curr;
             curr = curr->right;
@@ -185,6 +187,8 @@ auto Tree::remove_element(int value) -> bool {
             else return false;
         }
     }
+
+    //Элемент не имеет потомков
     if((curr->left == nullptr)&&(curr->right == nullptr)) {
         if(curr->data > parent->data)
             parent->right = curr->right;
@@ -194,6 +198,7 @@ auto Tree::remove_element(int value) -> bool {
         curr = parent;
         return true;
     }
+    //Элемент находится в середине дерева
     parent_delete = curr;
     parent = curr;
     if(curr->right != nullptr) {
@@ -236,7 +241,7 @@ auto Tree::remove_element(int value) -> bool {
     }
 }
 
-auto Tree::delete_Tree(Node* curr) -> void {
+auto delete_Tree(Node* curr) -> void {
     if (curr->right != nullptr)
         delete_Tree(curr->right);
     if (curr->left != nullptr)
@@ -249,4 +254,3 @@ Tree::~Tree() {
     if(root != nullptr)
         delete_Tree(root);
 };
-
