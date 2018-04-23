@@ -13,14 +13,11 @@ namespace BSTree {
         public:
         Tree();
         auto insert(int value) -> void;
-        auto add(Node*&, int) -> void;
-        auto print_(Node*, int) -> void;
-        auto print() -> void;
-        auto empty() -> bool;
+        auto exists() -> bool;
+        auto print_tree() -> void;
+        auto remove(int value) -> bool;
         auto add_element(int value) -> bool;
-        auto remove_element(int value) -> bool;
-        auto delete_Tree(Node* curr) -> void;
-        auto list (traversal_order order) -> void;
+        auto print(traversal_order order) -> void;
         ~Tree();
     };
 }
