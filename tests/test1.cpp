@@ -21,7 +21,7 @@ TEST_CASE("initializing tree nodes")
   REQUIRE( tree.exists() == false );
 
 }
-
+/*
 TEST_CASE("detour_pre")
 {
   Tree tree;
@@ -32,7 +32,7 @@ TEST_CASE("detour_pre")
   tree.insert(5);
 	
   std::ofstream out("file.txt");
-  out >> tree.print(traversal_order::pre);
+  out >> pre_detour_out(tree);
   out.close();
 	
   std::string result;
@@ -85,3 +85,4 @@ TEST_CASE("detour_post")
   REQUIRE(result == text);
 }
     
+*/
