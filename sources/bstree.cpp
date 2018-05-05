@@ -49,19 +49,33 @@ auto change_color(int c) -> void {
     }
 }
 
-auto Tree::exists() -> bool {
+auto Tree::empty() -> bool {
     if(root == nullptr)
         return true;
-    else return false;
+    return false;
 }
 
 Tree::Tree() : root {nullptr} {
 
 };
 
+auto swap(Tree& tree, Node* curr) -> void {
+    tree.insert(curr->data);
+    std::cout << curr->data << std::endl;
+    if (curr->left != nullptr)
+        swap(tree, curr->left);
+    if (curr->right != nullptr)
+        swap(tree, curr->right);
+}
+
+Tree::Tree(Tree& tree) {
+    root = nullptr;
+    swap(*this, tree.root);
+}
+
 auto add(Node*& curr, int value) -> void {
     if (curr == nullptr)
-        curr = new Node{value};
+        curr = new Node{value, nullptr, nullptr};
     else {
         if (curr->data < value) add(curr->right, value);
         if (curr->data > value) add(curr->left, value);
@@ -72,6 +86,13 @@ auto Tree::insert(int value) -> void {
     add(root, value);
     return;
 }
+
+Tree::Tree(std::initializer_list<int> list) {
+    root = nullptr;
+    for (auto x:list) {
+        insert(x);
+    }
+};
 
 //DETOUR{
 
@@ -129,7 +150,7 @@ auto print_(Node* curr, int level, int root_data) -> void {
         if (curr->right != nullptr) {
             print_(curr->right, level + 1, root_data);
         }
-        for (unsigned i = 0; i < level; ++i) std::cout << "  ";
+        for (unsigned i = 0; i < level; ++i) std::cout << "   ";
         if (curr->data != root_data) {
             std::cout << "--";
         }
@@ -145,6 +166,10 @@ auto Tree::print_tree() -> void {
 }
 
 auto Tree::add_element(int value) -> bool {
+    if (root == nullptr) {
+        add(root, value);
+        return true;
+    }
     Node* curr = root;
     Node* parent = curr;
     while(curr != nullptr) {
@@ -250,7 +275,87 @@ auto delete_Tree(Node* curr) -> void {
     curr = nullptr;
 }
 
+//DETOUR_OUT{
+
+auto pre_detour_out(Node* curr, std::ostream &stream) -> void {
+    if (curr != nullptr) {
+        stream << curr->data << " ";
+        pre_detour_out(curr->left, stream);
+        pre_detour_out(curr->right, stream);
+    }
+    else return;
+}
+
+//}
+
+auto Tree::save(const std::string& path) -> bool {
+    std::ifstream stream(path);
+    if (stream) {
+        std::cout << "Файл уже существует, перезаписать ? (Да|Нет): " << std::endl;
+        std::string answer;
+        std::cin >> answer;
+        if (answer == "Да") {
+            stream.close();
+            std::ofstream stream1(path);
+            pre_detour_out(root, stream1);
+            stream1.close();
+            return true;
+        }
+        else return false;
+    }
+    stream.close();
+    std::ofstream stream2(path);
+    pre_detour_out(root, stream2);
+    stream2.close();
+    return true;
+}
+
+auto Tree::load(const std::string& path) -> bool {
+    std::ifstream stream(path);
+    if (stream) {
+        delete_Tree(root);
+        int val;
+        stream >> val;
+        while(stream) {
+            this->insert(val);
+            stream >> val;
+        }
+        return true;
+    }
+    else return false;
+}
+
+auto Tree::exists(int value) -> bool {
+    if (value == root->data) return true;
+    Node* curr = root;
+    while (curr != nullptr) {
+        if (curr->data == value)
+            return true;
+        if (curr->data > value)
+            curr = curr->left;
+        else curr = curr->right;
+    }
+    return false;
+}
+
+namespace BSTree {
+
+    auto operator<<(std::ostream& stream,const Tree& tree) -> std::ostream& {
+        Node *curr= tree.root;
+        pre_detour_out(curr, stream);
+        return stream;
+    }
+
+}
+
+auto Tree::operator=(Tree& tree) -> Tree& {
+    delete_Tree(root);
+    swap(*this, tree.root);
+    return *this;
+};
+
 Tree::~Tree() {
     if(root != nullptr)
         delete_Tree(root);
 };
+
