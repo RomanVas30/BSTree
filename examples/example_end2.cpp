@@ -1,4 +1,3 @@
-#include <iostream>
 #include <string>
 #include "bstree.hpp"
 using namespace BSTree;
