@@ -26,6 +26,7 @@ class Tree {
   auto print_tree() -> void;
   auto exists(T value) -> bool;
   auto remove(T value) -> bool;
+  auto remove(Node<T>*&) -> void;
   auto add_element(T value) -> bool;
   auto print(traversal_order order) -> void;
   auto save(const std::string& path) -> bool;
@@ -59,10 +60,7 @@ auto copy(Tree<T>& tree, Node<T>* curr) -> void{
 
 template <typename T>
 auto Tree<T>::swap(Tree<T>& tree) -> void{
-  Tree tmp;
-  std::swap(tmp.root, tree.root);
-  std::swap(tmp.root, this->root);
-  std::swap(tmp.root, tree.root);
+  std::swap(this->root, tree.root);
 }
 
 template <typename T>
@@ -73,8 +71,9 @@ Tree<T>::Tree(Tree<T>& tree){
 
 template <typename T>
 auto add(Node<T>*& curr, T value) -> void {
-  if (curr == nullptr)
+  if (curr == nullptr){
     curr = new Node<T>{value, nullptr, nullptr};
+  }
   else {
     if (curr->data < value) add(curr->right, value);
     if (curr->data > value) add(curr->left, value);
@@ -273,11 +272,11 @@ auto Tree<T>::remove(T value) -> bool{
 }
 
 template <typename T>
-auto deleting(Node<T>* curr) -> void{
+auto Tree<T>::remove(Node<T>*& curr) -> void{
       if (curr->right != nullptr)
-        deleting(curr->right);
+        remove(curr->right);
       if (curr->left != nullptr)
-        deleting(curr->left);
+        remove(curr->left);
       delete curr;
       curr = nullptr;
 }
@@ -307,7 +306,8 @@ template <typename T>
 auto Tree<T>::load(const std::string& path) -> bool {
   std::ifstream stream(path);
   if (stream){
-    deleting(root);
+    if (root != nullptr)
+    remove(root);
     int val;
     stream >> val;
      while(stream){
@@ -354,7 +354,7 @@ auto Tree<T>::operator=(Tree<T>& tree) -> Tree&{
 template <typename T>
 Tree<T>::~Tree(){
   if(root != nullptr)
-  deleting(root);
+  remove(root);
 };
 
 }
