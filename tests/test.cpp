@@ -30,7 +30,7 @@ TEST_CASE("initializer_list")
   out.close();
   
   std::string result;
-  std::string text = "3 2 1 4 5";
+  std::string text = "3 2 1 4 5 ";
   std::ifstream in("file.txt");
   getline(in, result);
   
@@ -47,7 +47,7 @@ TEST_CASE("add_element_false")
   out.close();
   
   std::string result;
-  std::string text = "3 2 1 4 5";
+  std::string text = "3 2 1 4 5 ";
   std::ifstream in("file.txt");
   getline(in, result);
   
@@ -64,7 +64,7 @@ TEST_CASE("add_element_true")
   out.close();
   
   std::string result;
-  std::string text = "3 2 1 4 5 6";
+  std::string text = "3 2 1 4 5 6 ";
   std::ifstream in("file.txt");
   getline(in, result);
   
@@ -81,7 +81,7 @@ TEST_CASE("delete_element_false")
   out.close();
   
   std::string result;
-  std::string text = "3 2 1 4 5";
+  std::string text = "3 2 1 4 5 ";
   std::ifstream in("file.txt");
   getline(in, result);
   
@@ -98,7 +98,7 @@ TEST_CASE("delete_element_true")
   out.close();
   
   std::string result;
-  std::string text = "3 2 1 5";
+  std::string text = "3 2 1 5 ";
   std::ifstream in("file.txt");
   getline(in, result);
   
