@@ -64,7 +64,7 @@ auto menu(Tree<T> & tree) -> void {
     change_color(GREEN);
     int choise = 0;
     cin >> choise;
-    if (tree.empty()&&(choise != 8)&&(choise != 3)){
+    if (tree.empty()&&(choise != 8)&&(choise != 3)&&(choise != 6)){
         cout << "Дерево пустое!" << endl;
         cout << tree.empty() << endl;
     }
