@@ -8,13 +8,13 @@ using namespace BSTree;
 
 TEST_CASE("empty tree")
 {
-	Tree tree;
+	Tree<int> tree;
 	REQUIRE( tree.exists() == true );
 }
 
 TEST_CASE("initializing tree nodes")
 {
-  Tree tree;
+  Tree<int> tree;
   for (unsigned int i = 1; i < 5; ++i)
   tree.insert(i);
   
@@ -23,7 +23,7 @@ TEST_CASE("initializing tree nodes")
 }
 TEST_CASE("initializer_list")
 {
-  Tree tree = {3, 2, 4, 1, 5};
+  Tree<int> tree = {3, 2, 4, 1, 5};
 	
   std::ofstream out("file.txt");
   tree.save("file.txt");
@@ -39,7 +39,7 @@ TEST_CASE("initializer_list")
 
 TEST_CASE("add_element_false")
 {
-  Tree tree = {3, 2, 4, 1, 5};
+  Tree<int> tree = {3, 2, 4, 1, 5};
   tree.insert(4);
   
   std::ofstream out("file.txt");
@@ -56,7 +56,7 @@ TEST_CASE("add_element_false")
 
 TEST_CASE("add_element_true")
 {
-  Tree tree = {3, 2, 4, 1, 5};
+  Tree<int> tree = {3, 2, 4, 1, 5};
   tree.insert(6);
   
   std::ofstream out("file.txt");
@@ -73,7 +73,7 @@ TEST_CASE("add_element_true")
 
 TEST_CASE("delete_element_false")
 {
-  Tree tree = {3, 2, 4, 1, 5};
+  Tree<int> tree = {3, 2, 4, 1, 5};
   tree.remove(6);
   
   std::ofstream out("file.txt");
@@ -88,9 +88,9 @@ TEST_CASE("delete_element_false")
   REQUIRE(result == text);
 }
 
-TEST_CASE("add_element_false")
+TEST_CASE("delete_element_true")
 {
-  Tree tree = {3, 2, 4, 1, 5};
+  Tree<int> tree = {3, 2, 4, 1, 5};
   tree.remove(4);
   
   std::ofstream out("file.txt");
