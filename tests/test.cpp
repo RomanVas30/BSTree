@@ -9,7 +9,7 @@ using namespace BSTree;
 TEST_CASE("empty tree")
 {
 	Tree<int> tree;
-	REQUIRE( tree.exists() == true );
+	REQUIRE( tree.empty() == true );
 }
 
 TEST_CASE("initializing tree nodes")
@@ -18,7 +18,7 @@ TEST_CASE("initializing tree nodes")
   for (unsigned int i = 1; i < 5; ++i)
   tree.insert(i);
   
-  REQUIRE( tree.exists() == false );
+  REQUIRE( tree.empty() == false );
 
 }
 TEST_CASE("initializer_list")
@@ -103,4 +103,12 @@ TEST_CASE("delete_element_true")
   getline(in, result);
   
   REQUIRE(result == text);
+}
+
+TEST_CASE("search_elem")
+{
+  Tree<int> tree = {3, 2, 4, 1, 5};
+  
+  REQUIRE(tree.exists(6) == false);
+  REQUIRE(tree.exists(4) == true);
 }
